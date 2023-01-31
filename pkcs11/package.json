@@ -1,0 +1,26 @@
+{
+  "name": "insomnia-plugin-pkcs11",
+  "version": "0.0.1",
+  "description": "PKCS11 Plugin for Insomnia",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/lankke/insomnia-plugin-pkcs11.git"
+  },
+  "keywords": [
+    "pkcs11",
+    "usb",
+    "hsm",
+    "node",
+    "js"
+  ],
+  "author": "Lance Fono",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lankke/insomnia-plugin-pkcs11/issues"
+  },
+  "homepage": "https://github.com/lankke/insomnia-plugin-pkcs11#readme"
+}
