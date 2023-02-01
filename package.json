@@ -18,7 +18,8 @@
     "unlisted": true
   },
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
