@@ -4,6 +4,8 @@ A plugin to allow Insomnia users to access their certificates and public keys fr
 
 ## Changes
 
+0.0.3 - Add typescript interfaces for insomnia plugin
+
 0.0.2 - Convert to Typescript for development purposes
   - Added tsconfig file
   - Separate code to its own folder
