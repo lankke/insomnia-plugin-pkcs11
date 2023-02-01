@@ -22,13 +22,6 @@ const randomIntTemplateTag: TemplateTag = {
     }
 }
 
-var generateRandomInt : TemplateTagAction = {
-    name: "Generate Number",
-    run: async (context: any, min: number, max: number) =>{
-        return Math.round(min + Math.random() * (max - min));
-    }
-}
-
 /**
  * Example template tag that generates a random number 
  * between a user-provided MIN and MAX
