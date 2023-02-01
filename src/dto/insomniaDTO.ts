@@ -39,5 +39,5 @@ interface TemplateTagArgOption {
 interface TemplateTagAction {
   name: string,
   icon?: string,
-  run?: (...args: unknown[]) => Promise<void|number>
+  run?: (...args: unknown[]) => Promise<void|number|string>
 }
