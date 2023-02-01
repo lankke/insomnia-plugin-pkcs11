@@ -17,9 +17,9 @@ const randomIntTemplateTag: TemplateTag = {
             defaultValue: 100
         }
     ],
-    actions:[
-        generateRandomInt
-    ]   
+    run: async (context: any, min: number, max: number) =>{
+        return Math.round(min + Math.random() * (max - min));
+    }
 }
 
 var generateRandomInt : TemplateTagAction = {
