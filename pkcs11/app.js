@@ -60,13 +60,5 @@ var randomIntTemplateTag = {
         });
     }); }
 };
-var generateRandomInt = {
-    name: "Generate Number",
-    run: function (context, min, max) { return __awaiter(_this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2, Math.round(min + Math.random() * (max - min))];
-        });
-    }); }
-};
 module.exports.templateTags = [randomIntTemplateTag];
 //# sourceMappingURL=app.js.map
