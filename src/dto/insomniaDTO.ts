@@ -1,6 +1,32 @@
 
 interface TemplateTag {
+  name: string,
+  displayName: string,
+  disablePreview?: () => boolean,
+  description?: string,
+  deprecated?: boolean,
+  liveDisplayName?: (args: any) => string,
+  validate?: (value: any) => string,
+  priority?: number,
+  args: Array<TemplateTagArg>,
+  actions?: Array<TemplateTagAction>,
+  run?: TemplateTagAction
+}
 
+interface TemplateTagArg {
+  displayName: string,
+  description?: string,
+  defaultValue: string | number | boolean,
+  type: 'string' | 'number' | 'enum' | 'model' | 'boolean',
+  
+  // Only type == 'string'
+  placeholder?: string,
+
+  // Only type == 'model'
+  modelType?: string,
+
+  // Only type == 'enum'
+  options?: Array<TemplateTagArgOption>
 }
 
 interface TemplateTagArgOption {
@@ -13,5 +39,5 @@ interface TemplateTagArgOption {
 interface TemplateTagAction {
   name: string,
   icon?: string,
-  run?: (context: any) => Promise<void>
+  run?: (...args: unknown[]) => Promise<void|number>
 }
