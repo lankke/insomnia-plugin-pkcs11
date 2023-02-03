@@ -19,7 +19,7 @@
   },
   "scripts": {
     "test": "npm test",
-    "copy": "cp ./package.json pkcs11/ && cp ./README.md pkcs11/ && cp -r  ./images pkcs11/ && cp -r node_modules pkcs11/",
+    "copy": "cp ./package.json.prod pkcs11/package.json && cp ./README.md pkcs11/ && cp -r  ./images pkcs11/ ",
     "build": "tsc --build && npm run copy && cd pkcs11 && rm -rf node_modules && npm install --omit=dev"
   },
   "repository": {
