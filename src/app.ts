@@ -1,4 +1,6 @@
-import * as pkcs11js from 'pkcs11js';
+// import { initToken } from "./utils/pkcs11";
+
+const PKCS11_LIB_PATH = '/usr/lib/opensc-pkcs11.so';
 
 const randomIntTemplateTag: TemplateTag = {
     name: 'randomInteger',
@@ -38,9 +40,12 @@ const initializePkcs11: TemplateTag = {
         }
     ],
     run: async (context: any, label: string) =>{
-
-        const pkcs11 = new pkcs11js.PKCS11();
-        pkcs11.load()
+        try {
+            //initToken();
+            console.log("Blocking false inputs");
+        } catch (error) {
+            console.error(error);            
+        }
 
         return label;
     }
@@ -50,4 +55,4 @@ const initializePkcs11: TemplateTag = {
  * Example template tag that generates a random number 
  * between a user-provided MIN and MAX
  */
-module.exports.templateTags = [randomIntTemplateTag];
+module.exports.templateTags = [randomIntTemplateTag, initializePkcs11];

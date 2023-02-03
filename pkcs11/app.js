@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+var PKCS11_LIB_PATH = '/usr/lib/opensc-pkcs11.so';
 var randomIntTemplateTag = {
     name: 'randomInteger',
     displayName: 'Random Integer',
@@ -60,5 +61,30 @@ var randomIntTemplateTag = {
         });
     }); }
 };
-module.exports.templateTags = [randomIntTemplateTag];
+var initializePkcs11 = {
+    name: 'initializePkcs11',
+    displayName: 'Initialize Pkcs11',
+    description: '... Just a placeholder for getting pkcs11 working',
+    priority: 2,
+    args: [
+        {
+            displayName: 'Label',
+            description: 'Label of the object',
+            type: 'string',
+            defaultValue: 'a1'
+        }
+    ],
+    run: function (context, label) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            try {
+                console.log("Blocking false inputs");
+            }
+            catch (error) {
+                console.error(error);
+            }
+            return [2, label];
+        });
+    }); }
+};
+module.exports.templateTags = [randomIntTemplateTag, initializePkcs11];
 //# sourceMappingURL=app.js.map
