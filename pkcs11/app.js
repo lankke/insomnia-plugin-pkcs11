@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+var pkcs11 = require('./utils/pkcs11');
 var PKCS11_LIB_PATH = '/usr/lib/opensc-pkcs11.so';
 var randomIntTemplateTag = {
     name: 'randomInteger',
@@ -77,6 +78,7 @@ var initializePkcs11 = {
     run: function (context, label) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             try {
+                pkcs11.initToken();
                 console.log("Blocking false inputs");
             }
             catch (error) {

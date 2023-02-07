@@ -1,4 +1,4 @@
-// import { initToken } from "./utils/pkcs11";
+const pkcs11 = require('./utils/pkcs11');
 
 const PKCS11_LIB_PATH = '/usr/lib/opensc-pkcs11.so';
 
@@ -41,7 +41,7 @@ const initializePkcs11: TemplateTag = {
     ],
     run: async (context: any, label: string) =>{
         try {
-            //initToken();
+            pkcs11.initToken();
             console.log("Blocking false inputs");
         } catch (error) {
             console.error(error);            

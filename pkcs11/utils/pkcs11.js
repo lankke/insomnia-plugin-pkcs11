@@ -1,8 +1,7 @@
 "use strict";
 exports.__esModule = true;
-exports.initToken = void 0;
 var pkcs11js_1 = require("pkcs11js");
-function initToken() {
+module.exports.initToken = function () {
     try {
         var pkcs11 = new pkcs11js_1.PKCS11();
         pkcs11.load('/usr/lib/opensc-pkcs11.so');
@@ -16,6 +15,5 @@ function initToken() {
     finally {
         console.log("No issue here!");
     }
-}
-exports.initToken = initToken;
+};
 //# sourceMappingURL=pkcs11.js.map

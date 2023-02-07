@@ -18,9 +18,9 @@
     "unlisted": true
   },
   "scripts": {
-    "test": "npm test",
-    "copy": "cp ./package.json.prod pkcs11/package.json && cp ./README.md pkcs11/ && cp -r  ./images pkcs11/ ",
-    "build": "tsc --build && npm run copy && cd pkcs11 && rm -rf node_modules && npm install --omit=dev"
+    "test": "mocha test/*",
+    "copy": "cp ./package.json.prod pkcs11/package.json && cp ./README.md pkcs11/ && cp -r  ./images pkcs11/ && cp -r node_modules pkcs11/ ",
+    "build": "tsc --build && npm run copy"
   },
   "repository": {
     "type": "git",
@@ -39,11 +39,9 @@
     "url": "https://github.com/lankke/insomnia-plugin-pkcs11/issues"
   },
   "homepage": "https://github.com/lankke/insomnia-plugin-pkcs11#readme",
-  "dependencies": {
-    "pkcs11js": "^1.3.1"
-  },
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "mocha": "^10.2.0",
     "typescript": "^4.9.5"
   }
 }
