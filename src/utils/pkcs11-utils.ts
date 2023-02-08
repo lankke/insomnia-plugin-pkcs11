@@ -1,6 +1,6 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
 import { existsSync, openSync, writeFileSync, readFileSync, unlinkSync, closeSync} from 'fs';
-import { spawn, spawnSync } from "child_process";
+import { spawnSync } from "child_process";
 
 
 export class Pkcs11Utils implements Pkcs11UtilsDto{
