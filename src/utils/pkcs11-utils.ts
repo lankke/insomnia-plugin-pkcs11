@@ -1,5 +1,5 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
-import { existsSync, openSync, writeFileSync, unlink, readFileSync} from 'fs';
+import { existsSync, openSync, writeFileSync, unlink, readFileSync, unlinkSync, closeSync} from 'fs';
 import { spawn, spawnSync } from "child_process";
 
 
@@ -18,6 +18,17 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
     return "";
   }
 
+  /**
+   * signData - Signs data with a USB HSM token using Pkcs11 functions
+   * 
+   * Dependency: This implementation requires pkcs11-tool to be installed
+   *             on your machine. See opensc-pkcs11 documentation for more details.
+   * 
+   *             A USB HSM token must also be present in order for this function to work
+   * 
+   * @param data 
+   * @returns string: signature
+   */
   signData(data: string): string {
     var signature = "";
     var tempFilePath = "./temp.txt";
@@ -25,36 +36,32 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
 
     try {
       const fd = openSync(tempFilePath,'w+');
+      const fd2 = openSync(tempSignatureFilePath,'w+');
       writeFileSync(fd, data);
 
       const args = ['-s','-p','123456','-i', tempFilePath,'-o', tempSignatureFilePath];
 
       spawnSync('pkcs11-tool', args);
       
-      const fd2 = openSync(tempSignatureFilePath,'r');
       const sigData = readFileSync(fd2);
 
       const sigBuf = Buffer.from(sigData);
 
       signature = sigBuf.toString('base64');
 
-        
-    
-
-
+      closeSync(fd);
+      closeSync(fd2);
+      
     } catch (error) {
       console.error("There was an error!",error);
     }finally{
-      if(existsSync(tempFilePath)){
-        // unlink(tempFilePath,()=>{
-        //   console.log(tempFilePath, ' deleted');
-        // });
+      // Delete the temp files
+      if(existsSync(tempFilePath)){        
+        unlinkSync(tempFilePath);
       }
 
       if(existsSync(tempSignatureFilePath)){
-        // unlink(tempSignatureFilePath, ()=>{
-        //   console.log(tempSignatureFilePath, ' deleted');
-        // })
+        unlinkSync(tempSignatureFilePath);
       }
     }
     return signature;
