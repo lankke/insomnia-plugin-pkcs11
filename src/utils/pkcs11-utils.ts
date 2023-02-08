@@ -1,5 +1,5 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
-import { existsSync, openSync, writeFileSync, unlink, readFileSync, unlinkSync, closeSync} from 'fs';
+import { existsSync, openSync, writeFileSync, readFileSync, unlinkSync, closeSync} from 'fs';
 import { spawn, spawnSync } from "child_process";
 
 
@@ -33,6 +33,8 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
     var signature = "";
     var tempFilePath = "./temp.txt";
     var tempSignatureFilePath = "./sig.txt";
+
+    if(data.length < 1) throw "Invalid data given to sign function";
 
     try {
       const fd = openSync(tempFilePath,'w+');
