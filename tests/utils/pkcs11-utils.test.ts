@@ -1,18 +1,18 @@
 import { describe, it } from "mocha";
 import {expect,assert} from "chai";
 import { Pkcs11Utils} from '../../src/utils/pkcs11-utils';
-import { createPublicKey, createVerify, verify } from "crypto";
+import { createVerify } from "crypto";
 
 describe('pkcs11-utils main functions',()=>{
   var pkcs11Obj: Pkcs11Utils;
   
   beforeEach(()=>{
-    pkcs11Obj = new Pkcs11Utils();
+    pkcs11Obj = new Pkcs11Utils('/usr/lib/opensc-pkcs11.so', 0, '123456');
     assert.isOk(pkcs11Obj,'pkcs11Utils is ok');
   });
 
   afterEach(()=>{
-  })
+  });
   
 
   describe('pkcs11 sign function', ()=>{

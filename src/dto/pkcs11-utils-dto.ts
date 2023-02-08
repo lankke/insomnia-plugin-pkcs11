@@ -24,6 +24,11 @@ export interface Pkcs11UtilsDto{
    */
   signData(data: string): string;
 
+  /**
+   * 
+   * @param data - Original data that was signed
+   * @param signature - The signature
+   */
   verify(data:string, signature: string):boolean;
 }
 
