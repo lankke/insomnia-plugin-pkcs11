@@ -1,4 +1,5 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
+import { Pkcs11Tool } from "../dto/pkcs11-tool-dto";
 import { existsSync, openSync, writeFileSync, readFileSync, unlinkSync, closeSync} from 'fs';
 import { spawnSync } from "child_process";
 
@@ -15,6 +16,10 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
   }
 
   getObjectAsString(label: string, type: string): string {
+    return "";
+  }
+
+  private runPkcs11Tool( input: Pkcs11Tool.Dto) : string {
     return "";
   }
 
