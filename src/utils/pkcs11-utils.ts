@@ -32,7 +32,7 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
   signData(data: string): string {
     var signature = "";
     var tempFilePath = "./temp.txt";
-    var tempSignatureFilePath = "./sig.txt";
+    var tempSignatureFilePath = "./sig.der";
 
     if(data.length < 1) throw "Invalid data given to sign function";
 
@@ -41,7 +41,7 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
       const fd2 = openSync(tempSignatureFilePath,'w+');
       writeFileSync(fd, data);
 
-      const args = ['-s','-p','123456','-i', tempFilePath,'-o', tempSignatureFilePath];
+      const args = ['-s','-p','123456','-f','openssl','-i', tempFilePath,'-o', tempSignatureFilePath];
 
       spawnSync('pkcs11-tool', args);
       
@@ -62,9 +62,9 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
         unlinkSync(tempFilePath);
       }
 
-      if(existsSync(tempSignatureFilePath)){
-        unlinkSync(tempSignatureFilePath);
-      }
+      // if(existsSync(tempSignatureFilePath)){
+      //   unlinkSync(tempSignatureFilePath);
+      // }
     }
     return signature;
   }

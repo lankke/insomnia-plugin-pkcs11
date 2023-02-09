@@ -5,7 +5,8 @@
     "removeComments":true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "./pkcs11"
+    "outDir": "./pkcs11",
+    "esModuleInterop": true
   },
   "include":["./src/**/*"],
   "exclude":["node_modules"]

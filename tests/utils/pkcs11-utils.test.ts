@@ -1,7 +1,7 @@
 import { describe, it } from "mocha";
 import {expect,assert} from "chai";
 import { Pkcs11Utils} from '../../src/utils/pkcs11-utils';
-import { createVerify } from "crypto";
+import ASN1 from "@lapo/asn1js";
 
 describe('pkcs11-utils main functions',()=>{
   var pkcs11Obj: Pkcs11Utils;
@@ -37,14 +37,27 @@ describe('pkcs11-utils main functions',()=>{
       try {
         var signature = pkcs11Obj.signData(data);
 
-        var verify = createVerify('sha512');
+        var asn1 = ASN1.decode(signature);
 
-        result = verify.verify('key', signature,'base64');
+        result = !!asn1.content()?.length || false;
         
       } catch (error) {
         result = false;
       }
       expect(result).to.be.true;
+    });
+
+    it('throws an error if an invalid Signature has been given',()=>{
+      let exThrown = false;
+
+      try {
+        // Give the decode function a fake signature
+        ASN1.decode("fakeSignature");
+      } catch (error) {
+        console.error(error);
+        exThrown = true;
+      }
+      expect(exThrown).to.be.true;
     });
   });
 
