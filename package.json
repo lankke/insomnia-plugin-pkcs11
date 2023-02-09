@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-pkcs11",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "PKCS11 Plugin for Insomnia",
   "main": "pkcs11/app.js",
   "insomnia": {
@@ -8,8 +8,8 @@
     "displayName": "pkcs11 Plugin",
     "description": "The pkcs11 plugin enables users to fetch certificates and public keys from HSM USB Tokens via the opensc-pkcs11.so module.",
     "images": {
-      "icon": "pkcs11/pkcs11_icon.svg",
-      "cover": "pkcs11/cover.svg"
+      "icon": "images/pkcs11_icon.svg",
+      "cover": "images/cover.svg"
     },
     "publisher": {
       "name": "Lance Fono",
@@ -18,7 +18,8 @@
     "unlisted": true
   },
   "scripts": {
-    "test": "npm test"
+    "test": "mocha -r ts-node/register tests/**/*.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -37,7 +38,17 @@
     "url": "https://github.com/lankke/insomnia-plugin-pkcs11/issues"
   },
   "homepage": "https://github.com/lankke/insomnia-plugin-pkcs11#readme",
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/lapo__asn1js": "^1.2.1",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.18",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
   "dependencies": {
-    "pkcs11js": "^1.3.1"
+    "@lapo/asn1js": "^1.2.4"
   }
 }
