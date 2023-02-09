@@ -14,10 +14,20 @@ A plugin to allow Insomnia users to access their certificates and public keys fr
    - `pkcs11-tool --module /usr/local/lib/softhsm/libsofthsm2.so --login -p <your-pin-here> --keypairgen  --key-type EC:secp521r1  --slot-index 0 --label <your-label-here> `
 4.  Run the tests
     `npm run test`
-5.  
+
+## How to use the plugin
+
+**NOTE** *This plugin is not yet complete. While the signing functionality is ready, the Insomnia plugin code has not yet been implemented*
+
+### Current Functionalities
+
+- Signing - Sign data using keys stored in a USB HSM token
+  - This is currently implemented by calling *pkcs11-tool*, which must be installed separately [see prerequisites](#-prerequisites)
 
 
-## Changes
+## Change log
+0.0.5 - Change signature format to openssl (returns in base64 format)
+
 0.0.4 - Add tests and sign function via pkcs11-tool
 
 0.0.3 - Add typescript interfaces for insomnia plugin
