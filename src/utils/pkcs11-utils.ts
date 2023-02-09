@@ -62,9 +62,9 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
         unlinkSync(tempFilePath);
       }
 
-      // if(existsSync(tempSignatureFilePath)){
-      //   unlinkSync(tempSignatureFilePath);
-      // }
+      if(existsSync(tempSignatureFilePath)){
+        unlinkSync(tempSignatureFilePath);
+      }
     }
     return signature;
   }
