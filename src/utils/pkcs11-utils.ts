@@ -19,7 +19,16 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
     return "";
   }
 
+  private getPkcs11ToolFunction(args : Pkcs11Tool.Flag[]): Pkcs11Tool.FunctionType {
+
+    var type;
+
+    return type;
+  }
+
   private runPkcs11Tool( input: Pkcs11Tool.Dto) : string {
+    const {args, cmd} = input;
+
     return "";
   }
 

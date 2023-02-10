@@ -6,6 +6,11 @@ export namespace Pkcs11Tool{
   export type SignFlag = '-s'
   export type FileFlag = `-i ${Filename}` | `-o ${Filename}`
   export type Flag = SignFlag | PasswordFlag | FormatFlag
+  export enum FunctionType {
+    sign,
+    read,
+    write
+  }
 
   export interface Dto{
      args: Array<Flag>,

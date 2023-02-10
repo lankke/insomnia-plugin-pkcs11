@@ -13,7 +13,6 @@ describe('pkcs11-utils main functions',()=>{
 
   afterEach(()=>{
   });
-  
 
   describe('pkcs11 sign function', ()=>{
     it('returns a signature with valid input',()=>{
