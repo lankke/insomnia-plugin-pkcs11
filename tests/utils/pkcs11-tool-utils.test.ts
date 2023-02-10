@@ -5,7 +5,7 @@ describe('pkcs11-tool-utils',()=>{
   describe('pkcs11ToolGetFunction',()=>{
 
     it('throws an exception if no valid arguments are provided',()=>{
-
+      
     });
 
     it('returns "sign" when the -s flag is in the argument list',()=>{

@@ -16,4 +16,11 @@ export namespace Pkcs11Tool{
      args: Array<Flag>,
      cmd: 'pkcs11-tool'
   }
+
+  
+  export interface Pkcs11ToolCLICmds {
+    getFunction(args: Flag[]):FunctionType;
+    pkcs11Tool(input: Dto):string;
+  }
+
 }
