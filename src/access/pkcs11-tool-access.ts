@@ -1,6 +1,6 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
 import { Pkcs11Access } from "../dto/pkcs11-access-dto";
-import { SIG_FILE_PATH, TEMP_FILE_PATH, HSM_DEFAULT_OBJECT_TYPE } from "../../constants";
+import { SIGN_SIGNATURE_FILE, SIGN_RAW_DATA_FILE, HSM_DEFAULT_OBJECT_TYPE, HSM_DEFAULT_MECHANISM, VERIFY_SIGNATURE_FILE, VERIFY_RAW_DATA_FILE } from "../../constants";
 
 export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
   mechanism: string;
@@ -14,6 +14,7 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     this.module = module;
     this.pin = pin;
     this.slot = slot;
+    this.mechanism = HSM_DEFAULT_MECHANISM;
   }
 
   connect(){
@@ -30,23 +31,23 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     
     args.push('--slot-index', slotId);       // Set the slotId
     
-    type sign = Pkcs11Access.operation.sign;
-    
     switch(operation){
       case Pkcs11Access.operation.sign:
-        args.push('-s');                    // Set "sign" flag
-        args.push('-m', this.mechanism);    // Set the signing mechanism
-        args.push('-f','openssl');          // Set the signature format to use
-        args.push('-i', TEMP_FILE_PATH);    // Set the temp file that will store the data to be signed
-        args.push('-o', SIG_FILE_PATH);     // Set the signature file to temporarily store the signature
+        args.push('-s');                      // Set "sign" flag
+        args.push('-m', this.mechanism);      // Set the signing mechanism
+        args.push('-f','openssl');            // Set the signature format to use
+        args.push('-i', SIGN_RAW_DATA_FILE);  // Set the temp file that will store the data to be signed
+        args.push('-o', SIGN_SIGNATURE_FILE); // Set the signature file to temporarily store the signature
         break;
       case Pkcs11Access.operation.verify:
-        args.push('-v');
+        args.push('--verify');
+        args.push('-m',this.mechanism);
+        args.push('-i', VERIFY_RAW_DATA_FILE);
+        args.push('--signature-file', VERIFY_SIGNATURE_FILE);
         break;                       
         case Pkcs11Access.operation.getObject:
         args.push('-r');
-        args.push('--type');
-        args.push(HSM_DEFAULT_OBJECT_TYPE);
+        args.push('--type', HSM_DEFAULT_OBJECT_TYPE);
         
         break;
     }

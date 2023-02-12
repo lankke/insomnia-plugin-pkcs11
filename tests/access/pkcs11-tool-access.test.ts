@@ -1,7 +1,7 @@
 import {beforeEach, describe, it} from 'mocha';
 import {expect} from 'chai';
 import {Pkcs11ToolAccess} from '../../src/access/pkcs11-tool-access';
-import { HSM_MODULE_PATH, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIG_FILE_PATH, TEMP_FILE_PATH } from '../../constants';
+import { HSM_DEFAULT_MECHANISM, HSM_MODULE_PATH, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
 import { Pkcs11Access } from '../../src/dto/pkcs11-access-dto';
 
 describe('Pkcs11ToolAccess',()=>{
@@ -45,18 +45,18 @@ describe('Pkcs11ToolAccess',()=>{
       });
       it('contains the file input flag',()=>{
         expect(args).to.contain('-i');
-        expect(args).to.contain(TEMP_FILE_PATH);
+        expect(args).to.contain(SIGN_RAW_DATA_FILE);
       });
       it('contains the file output flag',()=>{
         expect(args).to.contain('-o');
-        expect(args).to.contain(SIG_FILE_PATH);
+        expect(args).to.contain(SIGN_SIGNATURE_FILE);
       });
       it('contains the module flag',()=>{
         expect(args).to.contain('--module');
         expect(args).to.contain(HSM_MODULE_PATH);
       });
       it('does not contain verify flag',()=>{
-        expect(args).not.to.contain('-v');
+        expect(args).not.to.contain('--verify');
       })
     });
 
@@ -81,6 +81,28 @@ describe('Pkcs11ToolAccess',()=>{
       it('contains the object type flag',()=>{
         expect(args).to.contain('--type');
       });
+    });
+    describe('for the verify operation',()=>{
+      before(()=>{
+        args = pkcs11.getFlags(Pkcs11Access.operation.verify);
+      });
+      it('contains the verification flag',()=>{
+        expect(args).to.contain('--verify');
+      });
+      it('contains the mechanism flag',()=>{
+        expect(args).to.contain('-m');
+        expect(args).to.contain(pkcs11.mechanism);
+      });
+      it('contains the pin flag',()=>{
+        expect(args).to.contain('-p');
+      });
+      it('contains signature file flag',()=>{
+        expect(args).to.contain('--signature-file');
+      });
+      it('contains the original input data flag',()=>{
+        expect(args).to.contain('-i');
+      })
+      
     });
   });
  
