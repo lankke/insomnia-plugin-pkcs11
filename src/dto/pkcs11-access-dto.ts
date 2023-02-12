@@ -3,3 +3,11 @@ export interface Pkcs11Access{
   pin?: string,
   slot?: number
 }
+
+export namespace Pkcs11Access{
+  export enum operation {
+    sign,
+    verify,
+    getObject
+  }
+}
