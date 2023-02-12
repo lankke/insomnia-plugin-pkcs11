@@ -1,9 +1,8 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
 import { Pkcs11Access } from "../dto/pkcs11-access-dto";
-import { SIG_FILE_PATH, TEMP_FILE_PATH } from "../../constants";
+import { SIG_FILE_PATH, TEMP_FILE_PATH, HSM_DEFAULT_OBJECT_TYPE } from "../../constants";
 
 export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
-  args: Array<string>;
   mechanism: string;
   module: string;
   pin: string;
@@ -27,7 +26,6 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     
     args.push('--module', this.module);     // Set the module (pkcs11 library) to use
     
-    
     args.push('-l','-p',this.pin);    // Set login and pin flags
     
     args.push('--slot-index', slotId);       // Set the slotId
@@ -45,7 +43,11 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
       case Pkcs11Access.operation.verify:
         args.push('-v');
         break;                       
-      case Pkcs11Access.operation.getObject:
+        case Pkcs11Access.operation.getObject:
+        args.push('-r');
+        args.push('--type');
+        args.push(HSM_DEFAULT_OBJECT_TYPE);
+        
         break;
     }
 
