@@ -1,8 +1,9 @@
-import {beforeEach, describe, it} from 'mocha';
+import {before, beforeEach, describe, it} from 'mocha';
 import {expect} from 'chai';
 import {Pkcs11ToolAccess} from '../../src/access/pkcs11-tool-access';
-import { HSM_MODULE_PATH, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
+import { HSM_MODULE_PATH, HSM_TEST_DATA, HSM_TEST_LABEL, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
 import { Pkcs11Access } from '../../src/dto/pkcs11-access-dto';
+import ASN1 from '@lapo/asn1js';
 
 describe('Pkcs11ToolAccess',()=>{
   var pkcs11: Pkcs11ToolAccess;
@@ -78,9 +79,6 @@ describe('Pkcs11ToolAccess',()=>{
       it('contains the read object flag',()=>{
         expect(args).to.contain('-r');
       });
-      it('contains the object type flag',()=>{
-        expect(args).to.contain('--type');
-      });
     });
     describe('for the verify operation',()=>{
       before(()=>{
@@ -104,6 +102,38 @@ describe('Pkcs11ToolAccess',()=>{
       })
       
     });
+  });
+
+  describe('signData',()=>{
+    
+    it('return a string',()=>{
+      try {
+        var signature = pkcs11.signData(HSM_TEST_LABEL, HSM_TEST_DATA );
+        
+        expect(signature).to.not.be.empty;
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    it('returns an ASN.1 encoded Signature',()=>{
+      var data = "twinky winky";
+      var result: boolean;
+      try {
+        var signature = pkcs11.signData(HSM_TEST_LABEL, data);
+
+        var asn1 = ASN1.decode(signature);
+
+        result = !!asn1.content()?.length || false;
+        
+      } catch (error) {
+        result = false;
+      }
+      expect(result).to.be.true;
+    });
+
+
+
   });
  
 

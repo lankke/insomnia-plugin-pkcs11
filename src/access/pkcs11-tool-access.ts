@@ -1,6 +1,8 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
 import { Pkcs11Access } from "../dto/pkcs11-access-dto";
 import { SIGN_SIGNATURE_FILE, SIGN_RAW_DATA_FILE, HSM_DEFAULT_OBJECT_TYPE, HSM_DEFAULT_MECHANISM, VERIFY_SIGNATURE_FILE, VERIFY_RAW_DATA_FILE } from "../../constants";
+import { closeSync, openSync, readFileSync, writeFileSync } from "fs";
+import { spawnSync } from "child_process";
 
 export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
   mechanism: string;
@@ -15,10 +17,6 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     this.pin = pin;
     this.slot = slot;
     this.mechanism = HSM_DEFAULT_MECHANISM;
-  }
-
-  connect(){
-
   }
   
   getFlags(operation: Pkcs11Access.operation): Array<string>{
@@ -46,9 +44,7 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
         args.push('--signature-file', VERIFY_SIGNATURE_FILE);
         break;                       
         case Pkcs11Access.operation.getObject:
-        args.push('-r');
-        args.push('--type', HSM_DEFAULT_OBJECT_TYPE);
-        
+        args.push('-r');        
         break;
     }
 
@@ -60,10 +56,30 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
   }
   signData(label: string, data: string): string {
 
-    const args: Array<string> = [];
+    const args = this.getFlags(Pkcs11Access.operation.sign);
     args.push('--label', label);       // Set the label of the private key object 
 
-    throw new Error("Method not implemented.");
+    // Open a file to write the data to
+    const rawDataFile = openSync(SIGN_RAW_DATA_FILE,'w+');
+    writeFileSync(rawDataFile, data);
+
+    // Create the file for the signature
+    const signatureFile = openSync(SIGN_SIGNATURE_FILE,'w+');
+    
+    // Run the pkcs11-tool with the correct args
+    const { error } = spawnSync('pkcs11-tool', args);
+
+    if(error) throw new Error("Method not implemented.");
+
+    // read the signature buffer from the file
+    const sigBuf = readFileSync(signatureFile);
+
+    if(sigBuf.length < 1) throw Error("Empty Signature");
+
+    closeSync(rawDataFile);
+    closeSync(signatureFile);
+
+    return sigBuf.toString('base64');
   }
   verify(data: string, signature: string): boolean {
     throw new Error("Method not implemented.");
