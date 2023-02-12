@@ -1,7 +1,7 @@
 import {beforeEach, describe, it} from 'mocha';
 import {expect} from 'chai';
 import {Pkcs11ToolAccess} from '../../src/access/pkcs11-tool-access';
-import { HSM_DEFAULT_MECHANISM, HSM_MODULE_PATH, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
+import { HSM_MODULE_PATH, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
 import { Pkcs11Access } from '../../src/dto/pkcs11-access-dto';
 
 describe('Pkcs11ToolAccess',()=>{
