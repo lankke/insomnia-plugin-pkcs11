@@ -19,10 +19,10 @@ export interface Pkcs11UtilsDto{
   
   /**
    * signData
-   * 
+   * @param label - Label of the private key object in the token
    * @param data - String of data to sign
    */
-  signData(data: string): string;
+  signData(label: string, data: string): string;
 
   /**
    * 

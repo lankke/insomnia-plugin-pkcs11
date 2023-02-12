@@ -2,29 +2,29 @@ import { describe, it } from "mocha";
 import {expect,assert} from "chai";
 import { Pkcs11Utils} from '../../src/utils/pkcs11-utils';
 import ASN1 from "@lapo/asn1js";
+import { HSM_MODULE_PATH, HSM_TEST_LABEL, HSM_TEST_PIN, HSM_TEST_SLOT_ID } from "../../constants";
 
 describe('pkcs11-utils main functions',()=>{
   var pkcs11Obj: Pkcs11Utils;
   
   beforeEach(()=>{
-    pkcs11Obj = new Pkcs11Utils('/usr/lib/opensc-pkcs11.so', 0, '123456');
+    pkcs11Obj = new Pkcs11Utils(HSM_MODULE_PATH, HSM_TEST_SLOT_ID, HSM_TEST_PIN, HSM_TEST_LABEL);
     assert.isOk(pkcs11Obj,'pkcs11Utils is ok');
   });
 
   afterEach(()=>{
   });
-  
 
   describe('pkcs11 sign function', ()=>{
     it('returns a signature with valid input',()=>{
-      var result = pkcs11Obj.signData("testData");
+      var result = pkcs11Obj.signData(HSM_TEST_LABEL,"testData");
       expect(result).not.to.be.empty;
     });
 
     it('throws an exception with invalid input',()=>{
       var errorFound = false;
       try {
-        pkcs11Obj.signData('');
+        pkcs11Obj.signData('','');
       } catch (error) {
         errorFound = true;
       }
@@ -35,7 +35,7 @@ describe('pkcs11-utils main functions',()=>{
       var data = "twinky winky";
       var result: boolean;
       try {
-        var signature = pkcs11Obj.signData(data);
+        var signature = pkcs11Obj.signData(HSM_TEST_LABEL, data);
 
         var asn1 = ASN1.decode(signature);
 
@@ -84,7 +84,7 @@ describe('pkcs11-utils main functions',()=>{
       var result: boolean;
       var data = "a wholelottadata";
       try {
-      var signature = pkcs11Obj.signData(data);
+      var signature = pkcs11Obj.signData(HSM_TEST_LABEL, data);
       
       result = pkcs11Obj.verify(data, signature);
 
