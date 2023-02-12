@@ -1,11 +1,14 @@
 export namespace Pkcs11Tool{
   type Password = string;
   type Filename = string;
+  type Label = string;
+  export type ModuleFlag = `--module`;
   export type PasswordFlag = `-p ${Password}`;
   export type FormatFlag = '-f openssl' | '-f rs';
   export type SignFlag = '-s'
-  export type FileFlag = `-i ${Filename}` | `-o ${Filename}`
-  export type Flag = SignFlag | PasswordFlag | FormatFlag
+  export type FileFlag = `-i ${Filename}` | `-o ${Filename}`;
+  export type LabelFlag = `-d ${Label}`;
+  export type Flag = ModuleFlag | SignFlag | PasswordFlag | FormatFlag | LabelFlag;
   export enum FunctionType {
     sign,
     read,
