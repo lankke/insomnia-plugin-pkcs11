@@ -74,6 +74,6 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
       console.error(error);
       result = false;
     }
-    return false;
+    return result;
   }
 }
