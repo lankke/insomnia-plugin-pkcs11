@@ -164,6 +164,7 @@ describe('Pkcs11ToolAccess',()=>{
         expect(verified).to.be.false;        
       } catch (error) {
         console.error(error);
+        expect(error).to.not.be.empty;
       }
     });
     it('throws an exception with bad input',()=>{

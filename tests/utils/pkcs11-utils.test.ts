@@ -82,20 +82,18 @@ describe('pkcs11-utils main functions',()=>{
   describe('pkcs11 verify function',()=>{
     it('verifies valid signatures against a valid public key',()=>{
       var result: boolean;
-      var data = "a wholelottadata";
+      const data = "a wholelottadata";
       try {
-      var signature = pkcs11Obj.signData(HSM_TEST_LABEL, data);
-      
-      result = pkcs11Obj.verify(data, signature);
+        var signature = pkcs11Obj.signData(HSM_TEST_LABEL, data);
+        
+        result = pkcs11Obj.verify(HSM_TEST_LABEL, data, signature);
 
       } catch (error) {
+        console.log(error);
         result = false;
       }
   
-        assert.isOk(result, 'Result was positive');
-      
+      expect(result).to.be.true;
     });
-
   });
-
 });

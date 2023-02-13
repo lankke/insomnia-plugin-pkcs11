@@ -4,6 +4,7 @@ import { spawnSync } from "child_process";
 import { HSM_DEFAULT_MECHANISM } from '../../constants';
 import { Pkcs11Tool } from "../dto/pkcs11-tool-dto";
 import { Pkcs11ToolAccess } from "../access/pkcs11-tool-access";
+import { sign } from "crypto";
 
 
 export class Pkcs11Utils implements Pkcs11UtilsDto{
@@ -54,12 +55,25 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
     } catch (error) {
       console.error("There was an error!",error);
     }
-    
+
     return signature;
   }
 
-  verify(data: string, signature: string): boolean {
+  verify(label: string, data: string, signature: string): boolean {
+    var result = false;
+    try {
+      var pkcs11 = new Pkcs11ToolAccess(
+      {
+        modulePath: this.module,
+        pin: this.pinNumber,
+        slot: this.slotId
+      });
+
+      result = pkcs11.verify(label, data, signature);
+    } catch (error) {
+      console.error(error);
+      result = false;
+    }
     return false;
   }
-
 }

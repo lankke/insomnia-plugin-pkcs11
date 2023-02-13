@@ -99,16 +99,14 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     writeFileSync(rawData, data);
     writeFileSync(signatureFile, sigBuf);
 
-    const { error, output} = spawnSync('pkcs11-tool', args);
+    const { stdout, signal, status } = spawnSync('pkcs11-tool', args);
     
     closeSync(rawData);
     closeSync(signatureFile);
 
-    if(error) return false;
-
-    if(!output[1]?.toString()?.match('Signature is valid')) return false;
-
-    return true;
+    if(signal == null && stdout.toString('utf8').match("Signature is valid")){
+      return true;
+    }
+    return false;
   }
-
 }
