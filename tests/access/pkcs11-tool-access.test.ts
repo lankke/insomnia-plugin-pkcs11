@@ -1,9 +1,10 @@
 import {before, beforeEach, describe, it} from 'mocha';
 import {expect} from 'chai';
 import {Pkcs11ToolAccess} from '../../src/access/pkcs11-tool-access';
-import { HSM_DEFAULT_SIGNATURE_FORMAT, HSM_MODULE_PATH, HSM_TEST_DATA, HSM_TEST_LABEL, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
+import { HSM_DEFAULT_SIGNATURE_FORMAT, HSM_MODULE_PATH, HSM_TEST_DATA, HSM_TEST_LABEL, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE, VERIFY_RAW_DATA_FILE, VERIFY_SIGNATURE_FILE } from '../../constants';
 import { Pkcs11Access } from '../../src/dto/pkcs11-access-dto';
 import ASN1 from '@lapo/asn1js';
+import { existsSync } from 'fs';
 
 describe('Pkcs11ToolAccess',()=>{
   var pkcs11: Pkcs11ToolAccess;
@@ -140,6 +141,11 @@ describe('Pkcs11ToolAccess',()=>{
         expect(error).to.exist;
       }
     });
+    it('should have deleted the temporary files',()=>{
+
+      expect(existsSync(SIGN_RAW_DATA_FILE)).to.be.false;
+      expect(existsSync(SIGN_SIGNATURE_FILE)).to.be.false;
+    });
   }); // end of signData
 
   describe('verifyData',()=>{
@@ -175,6 +181,11 @@ describe('Pkcs11ToolAccess',()=>{
         foundException = true;
       }
       expect(foundException).to.be.true;
+    });
+    it('should have deleted the temporary files',()=>{
+
+      expect(existsSync(VERIFY_RAW_DATA_FILE)).to.be.false;
+      expect(existsSync(VERIFY_SIGNATURE_FILE)).to.be.false;
     });
   }); // end of verifyData
 });

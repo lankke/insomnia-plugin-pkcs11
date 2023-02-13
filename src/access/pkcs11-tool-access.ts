@@ -1,7 +1,7 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
 import { Pkcs11Access } from "../dto/pkcs11-access-dto";
 import { SIGN_SIGNATURE_FILE, SIGN_RAW_DATA_FILE, HSM_DEFAULT_OBJECT_TYPE, HSM_DEFAULT_MECHANISM, VERIFY_SIGNATURE_FILE, VERIFY_RAW_DATA_FILE, HSM_DEFAULT_SIGNATURE_FORMAT } from "../../constants";
-import { closeSync, openSync, readFileSync, writeFileSync } from "fs";
+import { closeSync, existsSync, openSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import { spawnSync } from "child_process";
 
 export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
@@ -17,6 +17,13 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     this.pin = pin;
     this.slot = slot;
     this.mechanism = HSM_DEFAULT_MECHANISM;
+  }
+
+  private deleteTempFiles(files: Array<string>): void{
+    files.forEach(f=>{
+      if(existsSync(f)) unlinkSync(f);
+      else throw new Error(`Could not delete ${f}... it does not exists`);
+    });
   }
   
   getFlags(operation: Pkcs11Access.operation): Array<string>{
@@ -80,6 +87,8 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     closeSync(rawDataFile);
     closeSync(signatureFile);
 
+    this.deleteTempFiles([SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE]);
+
     return sigBuf.toString('base64');
   }
   verify(label: string, data: string, signature: string): boolean {
@@ -103,6 +112,8 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     
     closeSync(rawData);
     closeSync(signatureFile);
+
+    this.deleteTempFiles([VERIFY_RAW_DATA_FILE, VERIFY_SIGNATURE_FILE]);
 
     if(signal == null && stdout.toString('utf8').match("Signature is valid")){
       return true;
