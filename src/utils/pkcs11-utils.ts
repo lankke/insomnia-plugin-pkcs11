@@ -3,6 +3,7 @@ import { existsSync, openSync, writeFileSync, readFileSync, unlinkSync, closeSyn
 import { spawnSync } from "child_process";
 import { HSM_DEFAULT_MECHANISM } from '../../constants';
 import { Pkcs11Tool } from "../dto/pkcs11-tool-dto";
+import { Pkcs11ToolAccess } from "../access/pkcs11-tool-access";
 
 
 export class Pkcs11Utils implements Pkcs11UtilsDto{
@@ -35,58 +36,25 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
    * @returns string: signature
    */
   signData(label:string, data: string): string {
-    var signature = "";
-    var tempFilePath = "./temp.txt";
-    var tempSignatureFilePath = "./sig.der";
-    
+    var signature: string;
+    var pkcs11: Pkcs11ToolAccess;
+
     if(data.length < 1) throw "Invalid data given to sign function";
-
     try {
-      const fd = openSync(tempFilePath,'w+');
-      const fd2 = openSync(tempSignatureFilePath,'w+');
-      const slotId = this.slotId.toString();
-      writeFileSync(fd, data);
+      pkcs11 = new Pkcs11ToolAccess({
+        modulePath: this.module,
+        pin: this.pinNumber,
+        slot: this.slotId
+      });
 
-      var args = [];
-      args = ["--module", this.module, ]
-      args.push('--module', this.module);     // Set the module (pkcs11 library) to use
-      args.push('-s');                        // Set "sign" flag
-      args.push('-l','-p',this.pinNumber);    // Set login and pin flags
-      args.push('--slot-index', slotId);       // Set the slotId
-      args.push('--label', label);                 // Set the label of the private key object 
-      args.push('-m', this.mechanism);        // Set the signing mechanism
-      args.push('-f','openssl');              // Set the signature format to use
-      args.push('-i', tempFilePath);          // Set the temp file that will store the data to be signed
-      args.push('-o', tempSignatureFilePath); // Set the signature file to temporarily store the signature
+      signature = pkcs11.signData(label, data);
 
-
-      const {  error } = spawnSync('pkcs11-tool', args);
-      
-      if(error) throw error.message.toString();
-
-      const sigData = readFileSync(fd2);
-
-      if(sigData.length < 1) throw "cannot fetch signature data";
-
-      const sigBuf = Buffer.from(sigData);
-
-      signature = sigBuf.toString('base64');
-
-      closeSync(fd);
-      closeSync(fd2);
+      if(!signature) throw new Error("Signature was empty");
       
     } catch (error) {
       console.error("There was an error!",error);
-    }finally{
-      // Delete the temp files
-      if(existsSync(tempFilePath)){        
-        unlinkSync(tempFilePath);
-      }
-
-      if(existsSync(tempSignatureFilePath)){
-        unlinkSync(tempSignatureFilePath);
-      }
     }
+    
     return signature;
   }
 
