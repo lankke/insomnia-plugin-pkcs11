@@ -152,14 +152,15 @@ describe('Pkcs11ToolAccess',()=>{
 
     it('returns true when a valid signature is verified',()=>{
       try {
-        const verified = pkcs11.verify(HSM_TEST_DATA, signature);
+        const verified = pkcs11.verify(HSM_TEST_LABEL, HSM_TEST_DATA, signature);
+        expect(verified).to.be.true;
       } catch (error) {
         console.error(error);
       }
     });
     it('returns false when an invalid signature is given',()=>{
       try {
-        const verified = pkcs11.verify(HSM_TEST_DATA,fakeSignature);
+        const verified = pkcs11.verify(HSM_TEST_LABEL, HSM_TEST_DATA,fakeSignature);
         expect(verified).to.be.false;        
       } catch (error) {
         console.error(error);
@@ -168,7 +169,7 @@ describe('Pkcs11ToolAccess',()=>{
     it('throws an exception with bad input',()=>{
       var foundException = false;
       try {
-        pkcs11.verify("","");
+        pkcs11.verify("",HSM_TEST_DATA,signature);
       } catch (error) {
         foundException = true;
       }

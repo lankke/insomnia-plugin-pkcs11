@@ -25,11 +25,11 @@ export interface Pkcs11UtilsDto{
   signData(label: string, data: string): string;
 
   /**
-   * 
+   * @param label - Label of the private key object in the token
    * @param data - Original data that was signed
    * @param signature - The signature
    */
-  verify(data:string, signature: string):boolean;
+  verify(label:string, data:string, signature: string):boolean;
 }
 
 

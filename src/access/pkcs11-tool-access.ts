@@ -82,8 +82,33 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
 
     return sigBuf.toString('base64');
   }
-  verify(data: string, signature: string): boolean {
-    throw new Error("Method not implemented.");
+  verify(label: string, data: string, signature: string): boolean {
+    
+    [label,data,signature].find((arg)=>{
+      if(!arg.length) throw new Error(`${arg} is empty`);
+    });
+
+    const args = this.getFlags(Pkcs11Access.operation.verify);
+    args.push('--label',label);
+
+    const signatureFile = openSync(VERIFY_SIGNATURE_FILE,'w+');
+    const rawData = openSync(VERIFY_RAW_DATA_FILE,'w+');
+
+    const sigBuf = Buffer.from(signature, 'base64');
+
+    writeFileSync(rawData, data);
+    writeFileSync(signatureFile, sigBuf);
+
+    const { error, output} = spawnSync('pkcs11-tool', args);
+    
+    closeSync(rawData);
+    closeSync(signatureFile);
+
+    if(error) return false;
+
+    if(!output[1]?.toString()?.match('Signature is valid')) return false;
+
+    return true;
   }
 
 }
