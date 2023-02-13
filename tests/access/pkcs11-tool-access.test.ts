@@ -1,7 +1,7 @@
 import {before, beforeEach, describe, it} from 'mocha';
 import {expect} from 'chai';
 import {Pkcs11ToolAccess} from '../../src/access/pkcs11-tool-access';
-import { HSM_MODULE_PATH, HSM_TEST_DATA, HSM_TEST_LABEL, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
+import { HSM_DEFAULT_SIGNATURE_FORMAT, HSM_MODULE_PATH, HSM_TEST_DATA, HSM_TEST_LABEL, HSM_TEST_PIN, HSM_TEST_SLOT_ID, SIGN_RAW_DATA_FILE, SIGN_SIGNATURE_FILE } from '../../constants';
 import { Pkcs11Access } from '../../src/dto/pkcs11-access-dto';
 import ASN1 from '@lapo/asn1js';
 
@@ -99,17 +99,18 @@ describe('Pkcs11ToolAccess',()=>{
       });
       it('contains the original input data flag',()=>{
         expect(args).to.contain('-i');
-      })
-      
+      });
+      it('contains the signature format flag',()=>{
+        expect(args).to.contain('--signature-format');
+        expect(args).to.contain(HSM_DEFAULT_SIGNATURE_FORMAT);
+      });
     });
   });
 
-  describe('signData',()=>{
-    
+  describe('signData',()=>{ 
     it('return a string',()=>{
       try {
         var signature = pkcs11.signData(HSM_TEST_LABEL, HSM_TEST_DATA );
-        
         expect(signature).to.not.be.empty;
       } catch (error) {
         console.error(error);
@@ -132,9 +133,46 @@ describe('Pkcs11ToolAccess',()=>{
       expect(result).to.be.true;
     });
 
+    it('throws an error with wrong label',()=>{
+      try {
+        var signature = pkcs11.signData('h1','should fail');
+      } catch (error) {
+        expect(error).to.exist;
+      }
+    });
+  }); // end of signData
 
+  describe('verifyData',()=>{
+    var signature: string;
+    var fakeSignature = Buffer.from("fakesign").toString('base64');
 
-  });
- 
+    before(()=>{
+      signature = pkcs11.signData(HSM_TEST_LABEL, HSM_TEST_DATA);
+    });
 
+    it('returns true when a valid signature is verified',()=>{
+      try {
+        const verified = pkcs11.verify(HSM_TEST_DATA, signature);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+    it('returns false when an invalid signature is given',()=>{
+      try {
+        const verified = pkcs11.verify(HSM_TEST_DATA,fakeSignature);
+        expect(verified).to.be.false;        
+      } catch (error) {
+        console.error(error);
+      }
+    });
+    it('throws an exception with bad input',()=>{
+      var foundException = false;
+      try {
+        pkcs11.verify("","");
+      } catch (error) {
+        foundException = true;
+      }
+      expect(foundException).to.be.true;
+    });
+  }); // end of verifyData
 });

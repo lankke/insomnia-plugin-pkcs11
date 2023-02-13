@@ -1,6 +1,6 @@
 import { Pkcs11UtilsDto } from "../dto/pkcs11-utils-dto";
 import { Pkcs11Access } from "../dto/pkcs11-access-dto";
-import { SIGN_SIGNATURE_FILE, SIGN_RAW_DATA_FILE, HSM_DEFAULT_OBJECT_TYPE, HSM_DEFAULT_MECHANISM, VERIFY_SIGNATURE_FILE, VERIFY_RAW_DATA_FILE } from "../../constants";
+import { SIGN_SIGNATURE_FILE, SIGN_RAW_DATA_FILE, HSM_DEFAULT_OBJECT_TYPE, HSM_DEFAULT_MECHANISM, VERIFY_SIGNATURE_FILE, VERIFY_RAW_DATA_FILE, HSM_DEFAULT_SIGNATURE_FORMAT } from "../../constants";
 import { closeSync, openSync, readFileSync, writeFileSync } from "fs";
 import { spawnSync } from "child_process";
 
@@ -31,17 +31,18 @@ export class Pkcs11ToolAccess implements Pkcs11UtilsDto{
     
     switch(operation){
       case Pkcs11Access.operation.sign:
-        args.push('-s');                      // Set "sign" flag
-        args.push('-m', this.mechanism);      // Set the signing mechanism
-        args.push('-f','openssl');            // Set the signature format to use
-        args.push('-i', SIGN_RAW_DATA_FILE);  // Set the temp file that will store the data to be signed
-        args.push('-o', SIGN_SIGNATURE_FILE); // Set the signature file to temporarily store the signature
+        args.push('-s');                              // Set "sign" flag
+        args.push('-m', this.mechanism);              // Set the signing mechanism
+        args.push('-f', HSM_DEFAULT_SIGNATURE_FORMAT);// Set the signature format to use
+        args.push('-i', SIGN_RAW_DATA_FILE);          // Set the temp file that will store the data to be signed
+        args.push('-o', SIGN_SIGNATURE_FILE);         // Set the signature file to temporarily store the signature
         break;
       case Pkcs11Access.operation.verify:
         args.push('--verify');
         args.push('-m',this.mechanism);
         args.push('-i', VERIFY_RAW_DATA_FILE);
         args.push('--signature-file', VERIFY_SIGNATURE_FILE);
+        args.push('--signature-format', HSM_DEFAULT_SIGNATURE_FORMAT);
         break;                       
         case Pkcs11Access.operation.getObject:
         args.push('-r');        

@@ -5,6 +5,7 @@ export const HSM_TEST_DATA = 'justsometestdata';
 export const HSM_TEST_PIN = '12345';
 export const HSM_DEFAULT_MECHANISM = 'ECDSA';
 export const HSM_DEFAULT_OBJECT_TYPE = 'pubkey';
+export const HSM_DEFAULT_SIGNATURE_FORMAT = 'openssl';
 export const SIGN_RAW_DATA_FILE = './sign-raw-data.temp';
 export const SIGN_SIGNATURE_FILE = './sign-signature-data.temp';
 export const VERIFY_RAW_DATA_FILE = './verify-raw-data.temp';
