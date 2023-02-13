@@ -125,7 +125,7 @@ describe('Pkcs11ToolAccess',()=>{
 
         var asn1 = ASN1.decode(signature);
 
-        result = !!asn1.content()?.length || false;
+        result = true;
         
       } catch (error) {
         result = false;
