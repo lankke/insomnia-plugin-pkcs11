@@ -21,6 +21,11 @@ export class Pkcs11Utils implements Pkcs11UtilsDto{
   }
 
   getObjectAsString(label: string, type: string): string {
+    var pkcs11: Pkcs11ToolAccess;
+    var errorStr: string;
+
+    if(!label) throw "'label' must be a valid string";
+    if(!type) throw "'type' must be a valid string";
     return "";
   }
 

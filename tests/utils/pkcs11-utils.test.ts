@@ -77,6 +77,26 @@ describe('pkcs11-utils main functions',()=>{
 
       expect(ex).to.be.true;
     });
+    it('throws an exception if label is falsy', ()=>{
+      var err = '';
+      try {
+        var obj = pkcs11Obj.getObjectAsString('','publicKey');
+
+      } catch (error) {
+        err = error;
+      }
+      expect(err).to.contain('label');
+    });
+    it('throws an exception if type is falsy', ()=>{
+      var err = '';
+      try {
+        var obj = pkcs11Obj.getObjectAsString('a1','');
+
+      } catch (error) {
+        err = error;
+      }
+      expect(err).to.contain('type');
+    });
   });
   
   describe('pkcs11 verify function',()=>{
